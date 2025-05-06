@@ -11,15 +11,19 @@ public class GetClientThanOrders
         _uow = uow;
     }
     
-    public async Task<List<Client>> GetClientsWithMoreThanOrders(int orderCount)
+    public async Task<Client> GetClientWithMostOrders()
     {
-        var clients = await _uow.GetRepository<Client>().GetAll();
         var orders = await _uow.GetRepository<Order>().GetAll();
+        var clients = await _uow.GetRepository<Client>().GetAll();
 
-        var clientWithMoreThanOrders = clients
-            .Where(c => orders.Count(o => o.Clientid == c.Clientid) > orderCount)
-            .ToList();
+        var topClientId = orders
+            .GroupBy(o => o.Clientid)
+            .OrderByDescending(g => g.Count())
+            .Select(g => g.Key)
+            .FirstOrDefault();
 
-        return clientWithMoreThanOrders;
+        return clients.FirstOrDefault(c => c.Clientid == topClientId);
     }
+
+
 }

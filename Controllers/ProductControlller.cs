@@ -10,19 +10,20 @@ public class ProductController : ControllerBase
     private readonly GetProductExpensive _getProductExpensive;
     private readonly GetAverageOfProducts _getAverageOfProducts;
     private readonly GetNullDescriptionsInProducts _getNullDescriptionsInProducts;
-    private readonly GetProductsbyClient _getProductsbyClient;
+    private readonly GetClientsbyProduct _getClientsbyProduct;
 
     public ProductController(GetProductsGreatherThan getProductsGreatherThan,
         GetProductExpensive getProductExpensive,
         GetAverageOfProducts getAverageOfProducts,
         GetNullDescriptionsInProducts getNullDescriptionsInProducts,
-        GetProductsbyClient getProductsbyClient)
+        GetClientsbyProduct getClientsbyProduct)
 
     {
         _getProductsGreatherThan = getProductsGreatherThan;
         _getProductExpensive = getProductExpensive;
         _getAverageOfProducts = getAverageOfProducts;
         _getNullDescriptionsInProducts = getNullDescriptionsInProducts;
+        _getClientsbyProduct = getClientsbyProduct;
     }
     
     [HttpGet("GetProductsGreatherThan/{price}")]
@@ -65,10 +66,10 @@ public class ProductController : ControllerBase
         }
         return Ok(result);
     }
-    [HttpGet("GetProductsbyClient/{clientId}")]
-    public async Task<IActionResult> GetProductsbyClient(int clientId)
+    [HttpGet("GetClientsByProductId/{ProductId}")]
+    public async Task<IActionResult> GetClientsByProductId(int ProductId)
     {
-        var result = await _getProductsbyClient.GetProductsByClient(clientId);
+        var result = await _getClientsbyProduct.GetClientsByProduct(ProductId);
         if (result == null || !result.Any())
         {
             return NotFound();

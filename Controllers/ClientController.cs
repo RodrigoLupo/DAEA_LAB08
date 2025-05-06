@@ -28,11 +28,11 @@ public class ClientController : ControllerBase
         }
         return Ok(result);
     }
-    [HttpGet("GetClientThanOrders/{clientId}")]
-    public async Task<IActionResult> GetClientThanOrders(int clientId)
+    [HttpGet("GetClientThanOrders")]
+    public async Task<IActionResult> GetClientThanOrders()
     {
-        var result = await _getClientThanOrders.GetClientsWithMoreThanOrders(clientId);
-        if (result == null || !result.Any())
+        var result = await _getClientThanOrders.GetClientWithMostOrders();
+        if (result == null )
         {
             return NotFound();
         }
