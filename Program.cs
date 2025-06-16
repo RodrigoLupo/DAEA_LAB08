@@ -1,5 +1,6 @@
 using Lab8_RodrigoLupo.DTOs;
 using Lab8_RodrigoLupo.Models;
+using Lab8_RodrigoLupo.Repositories;
 using Lab8_RodrigoLupo.Repositories.Unit;
 using Lab8_RodrigoLupo.Services;
 using Microsoft.EntityFrameworkCore;
@@ -7,11 +8,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
-    });
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<PedidosDbContext>(options =>
@@ -37,6 +34,10 @@ builder.Services.AddScoped<GetClientThanOrders>();
 builder.Services.AddScoped<GetOrdersAndDetailsWithProducts>();
 builder.Services.AddScoped<GetProductsbyClient>();
 builder.Services.AddScoped<GetClientsbyProduct>();
+
+// Register the repository
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 var app = builder.Build();
 

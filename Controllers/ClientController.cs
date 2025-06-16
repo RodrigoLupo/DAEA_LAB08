@@ -1,3 +1,4 @@
+using Lab8_RodrigoLupo.Repositories;
 using Lab8_RodrigoLupo.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,14 +10,17 @@ public class ClientController : ControllerBase
     private readonly GetClientesbyName _getClientesbyName;
     private readonly GetClientThanOrders _getClientThanOrders;
     private readonly GetProductsbyClient _getProductsbyClient;
+    private readonly IClientRepository _clientRepository;
     public ClientController(GetClientesbyName getClientesbyName,
         GetClientThanOrders getClientThanOrders,
-        GetProductsbyClient getProductsbyClient)
+        GetProductsbyClient getProductsbyClient,
+        IClientRepository clientRepository)
 
     {
         _getClientesbyName = getClientesbyName;
         _getClientThanOrders = getClientThanOrders;
         _getProductsbyClient = getProductsbyClient;
+        _clientRepository = clientRepository;
     }
     [HttpGet("GetClientesByName/{name}")]
     public async Task<IActionResult> GetClientesByName(string name)
@@ -48,4 +52,25 @@ public class ClientController : ControllerBase
         }
         return Ok(result);
     }
+    [HttpGet("GetClientWithOrders")]
+    public async Task<IActionResult> GetClientWithOrders()
+    {
+        var result = await _clientRepository.GetClientWithOrders();
+        if (result == null || !result.Any())
+        {
+            return NotFound();
+        }
+        return Ok(result);
+    }
+    [HttpGet("GetClientByProductCount")]
+    public async Task<IActionResult> GetClientByProductCount()
+    {
+        var result = await _clientRepository.GetClientsByProductCount();
+        if (result == null || !result.Any())
+        {
+            return NotFound();
+        }
+        return Ok(result);
+    }
+    
 }
